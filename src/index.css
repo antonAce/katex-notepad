@@ -5,28 +5,3 @@
 * {
     overflow: hidden;
 }
-
-.application {
-    display: grid;
-    grid-template-columns: auto 15rem;
-    grid-template-rows: 0.2fr 1.8fr;
-    grid-auto-flow: row;
-    grid-template-areas:
-        "toolbar drafts"
-        "workspace drafts";
-}
-
-.drafts {
-    grid-area: drafts;
-    @apply bg-slate-900;
-}
-
-.workspace {
-    grid-area: workspace;
-    @apply bg-slate-600;
-}
-
-.toolbar {
-    grid-area: toolbar;
-    @apply bg-slate-300;
-}
