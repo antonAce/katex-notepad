@@ -5,3 +5,9 @@
 * {
     overflow: hidden;
 }
+
+@layer components {
+    .container {
+        @apply bg-base-100 w-full h-full rounded-lg border border-base-content/20;
+    }
+}
