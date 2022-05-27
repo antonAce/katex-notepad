@@ -6,11 +6,10 @@ module.exports = {
   ],
   theme: {
     colors: {
-      transparent: colors.transparent,
-      slate: colors.slate,
+      gray: colors.gray,
       neutral: {
-        DEFAULT: "#3D4451",
-        focus: "#303640",
+        DEFAULT: "#36393e",
+        focus: "#282b30",
         content: "#FFFFFF"
       },
       base: {
