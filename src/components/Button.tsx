@@ -7,7 +7,7 @@ interface ButtonProps {
 
 function Button(props: ButtonProps) {
     return (
-        <button type="button" onClick={props.onClick} className="w-14 h-14 inline-block p-2 bg-neutral-focus rounded-md bg-blue-600 text-base-100 leading-normal uppercase">{props.children}</button>
+        <button type="button" onClick={props.onClick} className="w-6 h-6 inline-block p-1 bg-neutral-focus rounded-md bg-blue-600 text-base-100 leading-normal uppercase">{props.children}</button>
     );
 }
 

@@ -5,6 +5,12 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    extend: {
+      spacing: {
+        'default': '0.5rem',
+        'icons': '1rem',
+      }
+    },
     colors: {
       gray: colors.gray,
       neutral: {
