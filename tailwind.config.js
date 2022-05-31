@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       spacing: {
         'default': '0.5rem',
-        'icons': '1rem',
+        'icons': '1.5rem',
       }
     },
     colors: {
