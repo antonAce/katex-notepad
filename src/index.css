@@ -2,16 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+html, body {
     overflow: hidden;
 }
 
-@layer components {
-    .toggle {
-        @apply bg-base-100/0 focus:bg-neutral/10 hover:bg-neutral/10 active:bg-neutral-focus/50;
-    }
+*::-webkit-scrollbar {
+    width: 5px;
+}
 
-    .toggle-active {
-        @apply bg-neutral/30 focus:bg-neutral/50 hover:bg-neutral/50 active:bg-neutral-focus/80;
-    }
+*::-webkit-scrollbar-track {
+    background: #00000000;
+}
+
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb:hover {
+    border-radius: 25px;
+    background-color: #334155;
+    background-clip: content-box;
 }

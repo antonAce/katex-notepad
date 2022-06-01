@@ -3,15 +3,16 @@ import Button from './Button';
 
 interface ToggleProps {
     onClick?: (value: boolean) => void,
-    children: ReactNode;
+    defaultNode: ReactNode;
+    toggledNode: ReactNode;
 }
 
 function Toggle(props: ToggleProps) {
     const [isToggled, setIsToggled] = useState(false);
-    const backgroundClass = isToggled ? "toggle-active" : "toggle";
+    const children = isToggled ? props.toggledNode : props.defaultNode;
 
     return (
-        <Button backgroundClass={backgroundClass} onClick={_ => { setIsToggled(!isToggled); props.onClick && props.onClick(!isToggled) }}>{props.children}</Button>
+        <Button onClick={_ => { setIsToggled(!isToggled); props.onClick && props.onClick(!isToggled); }}>{children}</Button>
     );
 }
 
