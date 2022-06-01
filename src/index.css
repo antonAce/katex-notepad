@@ -5,3 +5,13 @@
 * {
     overflow: hidden;
 }
+
+@layer components {
+    .toggle {
+        @apply bg-base-100/0 focus:bg-neutral/10 hover:bg-neutral/10 active:bg-neutral-focus/50;
+    }
+
+    .toggle-active {
+        @apply bg-neutral/30 focus:bg-neutral/50 hover:bg-neutral/50 active:bg-neutral-focus/80;
+    }
+}
