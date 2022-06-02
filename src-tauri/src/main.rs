@@ -3,11 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-static CONTEXT_MENU_ENABLED: bool = false;
-
 #[tauri::command]
 fn context_menu_enabled() -> Result<bool, ()> {
-    Ok(CONTEXT_MENU_ENABLED)
+    Ok(cfg!(debug_assertions)) // Disable context menu in release build
 }
 
 fn main() {
