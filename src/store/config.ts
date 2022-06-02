@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import hintReducer from './slice/hint';
+import toolbarReducer from './slice/toolbar';
 
 export const store = configureStore({
   reducer: {
-    hint: hintReducer
+    hint: hintReducer,
+    toolbar: toolbarReducer
   }
 })
 
