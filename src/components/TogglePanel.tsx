@@ -1,4 +1,8 @@
 import { memo } from 'react';
+
+import { setDefault, setHint } from '../store/slice/hint';
+import { useAppDispatch } from '../store/hooks';
+
 import Toggle from './Toggle';
 
 const RenderOnIcon = memo(() => (
@@ -36,13 +40,16 @@ const LightModeIcon = memo(() => (
 ));
 
 function TogglePanel() {
-
+    const dispatch = useAppDispatch();
 
     return (
         <div className="flex flex-row flex-nowrap gap-x-1 justify-end items-center w-full h-full p-default">
-            <Toggle defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
-            <Toggle defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
-            <Toggle defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} />
+            <Toggle onMouseEnter={_ => dispatch(setHint("theme"))} onMouseLeave={_ => dispatch(setDefault())}
+                defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
+            <Toggle onMouseEnter={_ => dispatch(setHint("render"))} onMouseLeave={_ => dispatch(setDefault())}
+                defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
+            <Toggle onMouseEnter={_ => dispatch(setHint("menu"))} onMouseLeave={_ => dispatch(setDefault())}
+                defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} />
         </div>
     );
 }

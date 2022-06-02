@@ -12,7 +12,7 @@ function Kbd(props: KbdProps) {
     };
 
     return (
-        <kbd className="border border-neutral-focus border-opacity-20 bg-base-200 px-2 rounded-lg" style={styles}>{props.children}</kbd>
+        <kbd className="border border-neutral-focus border-opacity-20 bg-base-200 px-2 py-1 rounded-md" style={styles}>{props.children}</kbd>
     );
 }
 

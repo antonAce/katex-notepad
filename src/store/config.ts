@@ -1,7 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import hintReducer from './slice/hint';
+
 export const store = configureStore({
-  reducer: {}
+  reducer: {
+    hint: hintReducer
+  }
 })
 
 export type RootState = ReturnType<typeof store.getState>;
