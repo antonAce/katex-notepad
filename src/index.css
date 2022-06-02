@@ -2,21 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-    overflow: hidden;
-}
-
 *::-webkit-scrollbar {
-    width: 5px;
+    display: none;
 }
 
-*::-webkit-scrollbar-track {
-    background: #00000000;
-}
-
-*::-webkit-scrollbar-thumb,
-*::-webkit-scrollbar-thumb:hover {
-    border-radius: 25px;
-    background-color: #334155;
-    background-clip: content-box;
+* {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
