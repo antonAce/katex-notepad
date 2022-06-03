@@ -1,9 +1,9 @@
 import { RootState } from '../store/config';
-import { setFilename } from '../store/slice/toolbar';
+import { setFilename } from '../store/slice/editor';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 
 function FilenameInput() {
-    const filename = useAppSelector((state: RootState) => state.toolbar.filename);
+    const filename = useAppSelector((state: RootState) => state.editor.filename);
 
     const dispatch = useAppDispatch();
 

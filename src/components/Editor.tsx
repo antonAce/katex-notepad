@@ -8,7 +8,7 @@ import { useAppSelector, useAppDispatch } from '../store/hooks';
 import FilenameInput from './FilenameInput';
 
 function Editor() {
-    const filename = useAppSelector((state: RootState) => state.toolbar.filename);
+    const filename = useAppSelector((state: RootState) => state.editor.filename);
     const fontSize = useAppSelector((state: RootState) => state.editor.fontSize);
     const isRender = useAppSelector((state: RootState) => state.editor.isRender);
     const content = useAppSelector((state: RootState) => state.editor.content);
@@ -32,7 +32,7 @@ function Editor() {
                     <FilenameInput />
                     <textarea className="flex-auto mt-2 rounded-md bg-transparent px-2 py-1 leading-loose w-full h-content border-0 outline-none hover:bg-neutral/10 focus:bg-neutral/10"
                         style={textAreaStyles} value={content} onChange={e => dispatch(setContent(e.target.value))}
-                        placeholder="Type your text or formulas here. To render equations wrap them into $ ... $. Hold 'SHIFT' to toggle render mode.">
+                        placeholder="Type your text or formulas here. Hold 'SHIFT' to toggle render mode. To render equations wrap them into $ ... $.">
                     </textarea>
                 </div>
             )}

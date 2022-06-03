@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ToolbarState {
-    filename: string;
+    isMenuOpened: boolean;
 }
 
 export const initialState: ToolbarState = {
-    filename: "Untitled"
+    isMenuOpened: false
 }
 
 export const toolbarSlice = createSlice({
     name: 'toolbar',
     initialState,
     reducers: {
-        setFilename: (state, action: PayloadAction<string>) => { state.filename = action.payload; }
+        toggleMenu: (state, action: PayloadAction<boolean>) => { state.isMenuOpened = action.payload; }
     }
 })
 
-export const { setFilename } = toolbarSlice.actions
+export const { toggleMenu } = toolbarSlice.actions
 export default toolbarSlice.reducer
