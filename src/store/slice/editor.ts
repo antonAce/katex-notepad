@@ -21,11 +21,15 @@ export const editorSlice = createSlice({
     initialState,
     reducers: {
         toggleRender: (state, action: PayloadAction<boolean>) => { state.isRender = action.payload; },
+        toggleDraft: (state) => { state.isDraft = false; },
         setFilename: (state, action: PayloadAction<string>) => { state.filename = action.payload; },
-        setContent: (state, action: PayloadAction<string>) => { state.content = action.payload; },
-        setFontSize: (state, action: PayloadAction<number>) => { state.fontSize = action.payload; }
+        setContent: (state, action: PayloadAction<string>) => {
+            state.content = action.payload;
+            state.isDraft = true;
+        },
+        setFontSize: (state, action: PayloadAction<number>) => { state.fontSize = action.payload; },
     }
 })
 
-export const { toggleRender, setFilename, setContent, setFontSize } = editorSlice.actions
+export const { toggleRender, toggleDraft, setFilename, setContent, setFontSize } = editorSlice.actions
 export default editorSlice.reducer
