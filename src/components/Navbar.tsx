@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { toggleRender, toggleDraft } from '../store/slice/editor';
+import { toggleRender, newFile, saveContentToFile } from '../store/slice/editor';
 import { useAppDispatch } from '../store/hooks';
 
 import Toggle from './Toggle';
@@ -15,15 +15,12 @@ const LightModeIcon = memo(() => (<svg xmlns="http://www.w3.org/2000/svg" classN
 
 function NavBar() {
     const dispatch = useAppDispatch();
-    const saveContentFromEditor = () => {
-        dispatch(toggleDraft());
-    };
 
     return (
         <div className="flex flex-row flex-nowrap w-full h-full bg-base-200">
             <div className="flex-auto">
                 <div className="flex flex-row flex-nowrap gap-x-1 justify-start items-center w-full h-full p-default">
-                    <Button>
+                    <Button onClick={_ => dispatch(newFile())}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-icons h-icons" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -33,7 +30,7 @@ function NavBar() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                         </svg>
                     </Button>
-                    <Button onClick={_ => saveContentFromEditor()}>
+                    <Button onClick={_ => dispatch(saveContentToFile())}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-icons h-icons" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                         </svg>

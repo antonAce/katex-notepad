@@ -5,7 +5,7 @@
 
 #[tauri::command]
 fn context_menu_enabled() -> Result<bool, ()> {
-    Ok(cfg!(debug_assertions)) // Disable context menu in release build
+    Ok(cfg!(debug_assertions))
 }
 
 fn main() {

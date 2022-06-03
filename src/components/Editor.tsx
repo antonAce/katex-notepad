@@ -32,7 +32,7 @@ function Editor() {
                     <FilenameInput />
                     <textarea className="flex-auto mt-2 rounded-md bg-transparent px-2 py-1 leading-loose w-full h-content border-0 outline-none hover:bg-neutral/10 focus:bg-neutral/10"
                         style={textAreaStyles} value={content} onChange={e => dispatch(setContent(e.target.value))}
-                        placeholder="Type your text or formulas here. Hold 'SHIFT' to toggle render mode. To render equations wrap them into $ ... $.">
+                        placeholder="Type your text or formulas here. Hold 'ALT' to toggle render mode. To render equations wrap them into $ ... $.">
                     </textarea>
                 </div>
             )}

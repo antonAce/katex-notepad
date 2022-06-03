@@ -13,8 +13,8 @@ function App() {
   useEffect(() => {
     contextMenuEvent();
 
-    document.addEventListener('keydown', (e) => { if (e.key === "Shift") { dispatch(toggleRender(true)); } });
-    document.addEventListener('keyup', (e) => { if (e.key === "Shift") { dispatch(toggleRender(false)); } });
+    document.addEventListener('keydown', (e) => { if (e.key === "Alt") { dispatch(toggleRender(true)); } });
+    document.addEventListener('keyup', (e) => { if (e.key === "Alt") { dispatch(toggleRender(false)); } });
   });
 
   return (
