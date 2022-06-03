@@ -1,6 +1,7 @@
 import { memo } from 'react';
 
 import { setDefault, setHint } from '../store/slice/hint';
+import { toggleRender } from '../store/slice/editor';
 import { useAppDispatch } from '../store/hooks';
 
 import Toggle from './Toggle';
@@ -47,7 +48,7 @@ function TogglePanel() {
             <Toggle onMouseEnter={_ => dispatch(setHint("theme"))} onMouseLeave={_ => dispatch(setDefault())}
                 defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
             <Toggle onMouseEnter={_ => dispatch(setHint("render"))} onMouseLeave={_ => dispatch(setDefault())}
-                defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
+                onClick={val => dispatch(toggleRender(val))} defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
             <Toggle onMouseEnter={_ => dispatch(setHint("menu"))} onMouseLeave={_ => dispatch(setDefault())}
                 defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} />
         </div>

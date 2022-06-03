@@ -6,6 +6,8 @@ import { store } from './store/config'
 
 import reportWebVitals from './reportWebVitals';
 import App from './App';
+
+import 'katex/dist/katex.min.css';
 import './index.css';
 
 contextMenuEvent();
