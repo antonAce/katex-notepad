@@ -2,10 +2,11 @@ import katex from 'katex';
 import React from 'react';
 
 import { RootState } from '../store/config';
-import { setContent } from '../store/slice/editor';
+import { setContent, setFontSize } from '../store/slice/editor';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 
 import FilenameInput from './FilenameInput';
+import NumberInput from './NumberInput';
 
 function Editor() {
     const filename = useAppSelector((state: RootState) => state.editor.filename);
@@ -29,7 +30,10 @@ function Editor() {
                 </div>
             ) : (
                 <div className="flex flex-col p-4 w-full h-full">
-                    <FilenameInput />
+                    <div className="flex flex-row gap-x-2">
+                        <div className="basis-20 min-w-20"><NumberInput minValue={8} maxValue={48} defaultValue={fontSize} onChange={val => dispatch(setFontSize(val))} /></div>
+                        <div className="flex-auto"><FilenameInput /></div>
+                    </div>
                     <textarea className="flex-auto mt-2 rounded-md bg-transparent px-2 py-1 w-full h-content border-0 outline-none hover:bg-neutral/10 focus:bg-neutral/10"
                         style={textAreaStyles} value={content} onChange={e => dispatch(setContent(e.target.value))}
                         placeholder="Type your text or formulas here. Hold 'ALT' to toggle render mode. To render equations wrap them into $ ... $.">
