@@ -21,16 +21,19 @@ function NumberInput(props: NumberInputProps) {
             props.onChange && props.onChange(value - 1);
         }
     };
-    const setInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const intValue = +event.target.value;
+    const onBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let intValue = +event.target.value;
 
-        if ((props.minValue && props.minValue > intValue) || (props.maxValue && props.maxValue < intValue)) { return; }
-        else { setValue(intValue); props.onChange && props.onChange(intValue); }
+        if (props.minValue && props.minValue > intValue) { intValue = props.minValue }
+        if (props.maxValue && props.maxValue < intValue) { intValue = props.maxValue }
+
+        setValue(intValue);
+        props.onChange && props.onChange(intValue);
     };
 
     return (
         <div className="number-input relative w-full h-10">
-            <input type="text" value={value} onChange={e => setInputValue(e)}
+            <input type="text" value={value} onChange={e => setValue(+e.target.value)} onBlur={e => onBlur(e)}
                 className="rounded-md px-2 py-1 border-0 outline-none font-extrabold bg-transparent text-neutral hover:bg-neutral/10 focus:bg-neutral/10 w-full h-10" />
             <button onClick={_ => increment()} className="absolute w-3 h-3 right-2 top-2 rounded-sm bg-transparent focus:bg-neutral/10 hover:bg-neutral/10 active:bg-neutral-focus/50">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
