@@ -1,9 +1,11 @@
 export type RenderType = "formula" | "text";
 export const inlineTexWrapper = "$";
+
 export interface RenderPiece {
     type: RenderType;
     content: string;
 }
+
 export function parseContent(content: string): RenderPiece[] {
     let currentPiece: string = "";
     let currentPieceType: RenderType = "text";
