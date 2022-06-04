@@ -18,10 +18,10 @@ function Editor() {
     const textAreaStyles: React.CSSProperties = { resize: "none", fontSize: `${fontSize}px` };
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full bg-base-100 dark:bg-base-900">
             {isRender ? (
                 <div className="flex flex-col p-4 w-full h-full">
-                    <div className="p-2 font-extrabold w-full h-10 text-neutral">{filename}</div>
+                    <div className="p-2 font-extrabold w-full h-10 text-base-800 dark:text-base-300">{filename}</div>
                     <EditorRender content={content} fontSize={fontSize} />
                 </div>
             ) : (
@@ -30,7 +30,8 @@ function Editor() {
                         <div className="flex-auto"><FilenameInput /></div>
                         <div className="basis-20 min-w-20"><NumberInput minValue={8} maxValue={36} defaultValue={fontSize} onChange={val => dispatch(setFontSize(val))} /></div>
                     </div>
-                    <textarea className="flex-auto mt-2 rounded-md bg-transparent text-neutral-focus px-2 py-1 w-full h-content border-0 outline-none hover:bg-neutral/10 focus:bg-neutral/10"
+                    <textarea className="flex-auto mt-2 rounded-md bg-transparent dark:bg-base-900 text-base-800 dark:text-base-300 px-2 py-1 w-full h-content 
+                            border-0 outline-none hover:bg-base-800/10 focus:bg-base-800/10 dark:hover:bg-base-200/10 dark:focus:bg-base-200/10"
                         style={textAreaStyles} value={content} onChange={e => dispatch(setContent(e.target.value))}
                         placeholder="Type your text or formulas here. Hold 'ALT' to toggle render mode. To render equations wrap them into $ ... $.">
                     </textarea>

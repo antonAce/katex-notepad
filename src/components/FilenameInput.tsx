@@ -12,10 +12,11 @@ function FilenameInput() {
 
     return (
         <div className="relative w-full h-10">
-            {isDraft ? (<span className="absolute bg-neutral rounded-full w-2 h-2" style={draftDotStyles}></span>) : (<></>)}
+            {isDraft ? (<span className="absolute bg-base-800 dark:bg-base-200 rounded-full w-2 h-2" style={draftDotStyles}></span>) : (<></>)}
             <input type="text" name="file-name" id="file-name" placeholder="Filename" style={isDraft ? draftInputStyles : {}}
                 spellCheck="false" autoComplete="false" value={filename} onChange={e => dispatch(setFilename(e.target.value))}
-                className="rounded-md px-2 py-1 border-0 outline-none font-extrabold bg-transparent text-neutral hover:bg-neutral/10 focus:bg-neutral/10 w-full h-10" />
+                className="rounded-md px-2 py-1 border-0 outline-none font-extrabold 
+                    bg-transparent dark:bg-base-900 text-base-800 dark:text-base-300 hover:bg-base-800/10 focus:bg-base-800/10 dark:hover:bg-base-200/10 dark:focus:bg-base-200/10 w-full h-10" />
         </div>
     );
 }

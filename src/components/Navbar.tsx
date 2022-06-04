@@ -18,7 +18,7 @@ function NavBar() {
     const dispatch = useAppDispatch();
 
     return (
-        <div className="flex flex-row flex-nowrap w-full h-full bg-base-200">
+        <div className="flex flex-row flex-nowrap w-full h-full bg-base-200 dark:bg-base-800">
             <div className="flex-auto">
                 <div className="flex flex-row flex-nowrap gap-x-1 justify-start items-center w-full h-full p-default">
                     <Button onClick={_ => dispatch(newFile())}>

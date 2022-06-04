@@ -10,7 +10,7 @@ function InlineTex(props: InlineTexProps) {
     const renderedContent = katex.renderToString(props.content, { displayMode: false, throwOnError: false });
 
     return (
-        <span className="bg-transparent text-neutral-focus" style={renderInlineStyles} dangerouslySetInnerHTML={{ __html: renderedContent }} ></span>
+        <span className="bg-transparent text-base-800 dark:text-base-300" style={renderInlineStyles} dangerouslySetInnerHTML={{ __html: renderedContent }} ></span>
     );
 }
 

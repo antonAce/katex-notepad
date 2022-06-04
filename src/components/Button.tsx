@@ -10,7 +10,7 @@ interface ButtonProps {
 function Button(props: ButtonProps) {
     return (
         <button type="button" onClick={props.onClick} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}
-            className="w-8 h-8 inline-block p-1 rounded-md text-neutral leading-normal uppercase bg-transparent focus:bg-neutral/10 hover:bg-neutral/10 active:bg-neutral-focus/50">{props.children}</button>
+            className="w-8 h-8 inline-block p-1 rounded-md text-base-800 dark:text-base-300 leading-normal uppercase bg-transparent focus:bg-base-800/10 hover:bg-base-800/10 active:bg-base-900/50">{props.children}</button>
     );
 }
 

@@ -12,7 +12,7 @@ function EditorRender(props: EditorRenderProps) {
             { parseContent(props.content).map(
                 (piece, i) => piece.type === "formula" ?
                 (<InlineTex key={i} content={piece.content} fontSize={props.fontSize} />) :
-                (<span key={i} className="bg-transparent text-neutral-focus" style={{ fontSize: `${props.fontSize}px`, fontFamily: `"Times New Roman", Times, serif` }}>{piece.content}</span>))
+                (<span key={i} className="bg-transparent text-base-800 dark:text-base-300" style={{ fontSize: `${props.fontSize}px`, fontFamily: `"Times New Roman", Times, serif` }}>{piece.content}</span>))
             }
         </span>
     );

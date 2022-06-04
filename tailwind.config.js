@@ -13,17 +13,23 @@ module.exports = {
       }
     },
     colors: {
-      gray: colors.gray,
       neutral: {
         DEFAULT: "#36393e",
         focus: "#282b30",
-        content: "#FFFFFF"
+        content: "#ffffff"
       },
       base: {
-        100: "#FFFFFF",
-        200: "#F2F2F2",
-        300: "#E5E6E6",
-        content: "#1F2937"
+        100: "#ffffff",
+        200: "#f2f2f2",
+        300: "#e5e6e6",
+        400: "#94a3b8",
+        500: "#64748b",
+        600: "#40444b",
+        700: "#2f3136",
+        800: "#292b2f",
+        900: "#202225",
+        content: "#1F2937",
+        "content-dark": "#FAFAFA"
       }
     }
   },
