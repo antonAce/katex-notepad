@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { toggleTheme } from '../store/slice/toolbar';
 import { toggleRender, newFile, saveContentToFile } from '../store/slice/editor';
 import { useAppDispatch } from '../store/hooks';
 
@@ -50,7 +51,7 @@ function NavBar() {
             </div>
             <div className="basis-18 min-w-18">
                 <div className="flex flex-row flex-nowrap gap-x-1 justify-start items-center w-full h-full p-default">
-                    <Toggle defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
+                    <Toggle onClick={value => dispatch(toggleTheme(value))} defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
                     <Toggle defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} />
                 </div>
             </div>
