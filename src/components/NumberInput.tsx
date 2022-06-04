@@ -9,10 +9,20 @@ interface NumberInputProps {
 
 function NumberInput(props: NumberInputProps) {
     const [value, setValue] = useState(props.defaultValue ?? 0);
-    const increment = () => { setValue(value + 1); props.onChange && props.onChange(value + 1); };
-    const decrement = () => { setValue(value - 1); props.onChange && props.onChange(value - 1); };
+    const increment = () => {
+        if (props.maxValue && props.maxValue > value) {
+            setValue(value + 1);
+            props.onChange && props.onChange(value + 1);
+        }
+    };
+    const decrement = () => {
+        if (props.minValue && props.minValue < value) {
+            setValue(value - 1);
+            props.onChange && props.onChange(value - 1);
+        }
+    };
     const setInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const intValue = +event.target.value
+        const intValue = +event.target.value;
 
         if ((props.minValue && props.minValue > intValue) || (props.maxValue && props.maxValue < intValue)) { return; }
         else { setValue(intValue); props.onChange && props.onChange(intValue); }
