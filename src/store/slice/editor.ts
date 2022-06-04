@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/window';
+import { AlignText } from '../types';
 
 interface EditorState {
     isDraft: boolean;
     isRender: boolean;
     filename: string;
     content: string;
+    alignText: AlignText;
     fontSize: number;
 }
 
@@ -14,6 +16,7 @@ export const initialState: EditorState = {
     isRender: false,
     filename: "Untitled",
     content: "",
+    alignText: "left",
     fontSize: 14
 }
 
@@ -34,6 +37,7 @@ export const editorSlice = createSlice({
             state.content = action.payload;
             state.isDraft = true;
         },
+        setAlignment: (state, action: PayloadAction<AlignText>) => { state.alignText = action.payload; },
         setFontSize: (state, action: PayloadAction<number>) => { state.fontSize = action.payload; },
         saveContentToFile: (state) => {
             setFilenameInTitle(state.filename);
@@ -44,6 +48,7 @@ export const editorSlice = createSlice({
 
 export const {
     newFile, toggleRender, setFilename,
-    setContent, setFontSize, saveContentToFile
+    setContent, setAlignment, setFontSize,
+    saveContentToFile
 } = editorSlice.actions
 export default editorSlice.reducer

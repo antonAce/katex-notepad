@@ -1,14 +1,19 @@
 import InlineTex from './InlineTex'
+
 import { parseContent } from '../services/render';
+import { AlignText } from '../store/types';
 
 interface EditorRenderProps {
     fontSize: number;
     content: string;
+    align: AlignText;
 }
 
 function EditorRender(props: EditorRenderProps) {
+    const renderStyles: React.CSSProperties = { textAlign: props.align };
+
     return (
-        <span className="bg-transparent px-2 py-1 mt-2">
+        <span className="bg-transparent px-2 py-1 mt-2" style={renderStyles}>
             { parseContent(props.content).map(
                 (piece, i) => piece.type === "formula" ?
                 (<InlineTex key={i} content={piece.content} fontSize={props.fontSize} />) :
