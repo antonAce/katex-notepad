@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '../store/hooks';
 
 import FilenameInput from './FilenameInput';
 import NumberInput from './NumberInput';
-import InlineTex from './InlineTex';
+import EditorRender from './EditorRender';
 
 function Editor() {
     const filename = useAppSelector((state: RootState) => state.editor.filename);
@@ -22,7 +22,7 @@ function Editor() {
             {isRender ? (
                 <div className="flex flex-col p-4 w-full h-full">
                     <div className="p-2 font-extrabold w-full h-10 text-neutral">{filename}</div>
-                    <div className="bg-transparent px-2 py-1 mt-2"><InlineTex content={content} fontSize={fontSize} /></div>
+                    <EditorRender content={content} fontSize={fontSize} />
                 </div>
             ) : (
                 <div className="flex flex-col p-4 w-full h-full">
