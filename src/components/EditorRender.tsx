@@ -8,13 +8,13 @@ interface EditorRenderProps {
 
 function EditorRender(props: EditorRenderProps) {
     return (
-        <div className="bg-transparent px-2 py-1 mt-2">
+        <span className="bg-transparent px-2 py-1 mt-2">
             { parseContent(props.content).map(
-                piece => piece.type === "formula" ?
-                (<InlineTex content={props.content} fontSize={props.fontSize} />) :
-                (<div className="bg-transparent text-neutral-focus" style={{ fontSize: `${props.fontSize}px`, fontFamily: `"Times New Roman", Times, serif` }}>{props.content}</div>))
+                (piece, i) => piece.type === "formula" ?
+                (<InlineTex key={i} content={piece.content} fontSize={props.fontSize} />) :
+                (<span key={i} className="bg-transparent text-neutral-focus" style={{ fontSize: `${props.fontSize}px`, fontFamily: `"Times New Roman", Times, serif` }}>{piece.content}</span>))
             }
-        </div>
+        </span>
     );
 }
 
