@@ -31,8 +31,8 @@ function Editor() {
             ) : (
                 <div className="flex flex-col p-4 w-full h-full">
                     <div className="flex flex-row gap-x-2">
-                        <div className="basis-20 min-w-20"><NumberInput minValue={8} maxValue={48} defaultValue={fontSize} onChange={val => dispatch(setFontSize(val))} /></div>
                         <div className="flex-auto"><FilenameInput /></div>
+                        <div className="basis-20 min-w-20"><NumberInput minValue={8} maxValue={36} defaultValue={fontSize} onChange={val => dispatch(setFontSize(val))} /></div>
                     </div>
                     <textarea className="flex-auto mt-2 rounded-md bg-transparent px-2 py-1 w-full h-content border-0 outline-none hover:bg-neutral/10 focus:bg-neutral/10"
                         style={textAreaStyles} value={content} onChange={e => dispatch(setContent(e.target.value))}
