@@ -17,11 +17,27 @@ body {
 }
 
 .number-input::after {
-    position: absolute;
-    right: 2.2rem;
-    bottom: 0.5rem;
+    @apply absolute bottom-2 right-9 text-base-800 dark:text-base-300 font-extrabold;
     transition: all .05s ease-in-out;
     content: 'px';
+}
 
-    @apply text-base-800 dark:text-base-300 font-extrabold;
+.spinner {
+    @apply inline-block w-6 h-6;
+}
+
+.spinner:after {
+    @apply block w-4 h-4 m-1 rounded-[50%] border-[0.15rem] border-solid border-y-base-800 border-x-base-100/0;
+    animation: spinner 1.2s linear infinite;
+    content: " ";
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
