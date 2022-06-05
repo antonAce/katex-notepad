@@ -1,24 +1,43 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/window';
+import { saveToFileDialog, showErrorMessage } from '../../services/dialog';
+import { saveFile } from '../../services/file';
 import { AlignText } from '../types';
 
 interface EditorState {
     isDraft: boolean;
     isRender: boolean;
+    isSaving: boolean;
     filename: string;
+    filepath?: string;
     content: string;
     alignText: AlignText;
     fontSize: number;
 }
 
+export interface FileStructure {
+    filepath?: string;
+    content: string;
+}
+
 export const initialState: EditorState = {
     isDraft: true,
     isRender: false,
+    isSaving: false,
     filename: "Untitled",
+    filepath: undefined,
     content: "",
     alignText: "left",
     fontSize: 14
 }
+
+export const saveContentToFile = createAsyncThunk('editor/saveContentToFile', async (file: FileStructure) => {
+    const filepath = file.filepath ?? await saveToFileDialog();
+    const filename = filepath.replace(/^.*[\\/]/, '').split('.')[0]
+
+    await saveFile(filepath, file.content);
+    return [filepath, filename];
+});
 
 export const editorSlice = createSlice({
     name: 'editor',
@@ -28,6 +47,7 @@ export const editorSlice = createSlice({
             setDefaultTitle();
             state.content = "";
             state.filename = "Untitled";
+            state.filepath = undefined;
             state.isRender = false;
             state.isDraft = true;
         },
@@ -38,17 +58,31 @@ export const editorSlice = createSlice({
             state.isDraft = true;
         },
         setAlignment: (state, action: PayloadAction<AlignText>) => { state.alignText = action.payload; },
-        setFontSize: (state, action: PayloadAction<number>) => { state.fontSize = action.payload; },
-        saveContentToFile: (state) => {
-            setFilenameInTitle(state.filename);
-            state.isDraft = false;
-        }
+        setFontSize: (state, action: PayloadAction<number>) => { state.fontSize = action.payload; }
+    },
+    extraReducers(builder) {
+        builder
+            .addCase(saveContentToFile.pending, (state, action) => {
+                state.isSaving = true;
+            })
+            .addCase(saveContentToFile.fulfilled, (state, action) => {
+                const [filepath, filename] = action.payload;
+
+                if (!state.filepath) { state.filepath = filepath; }
+                setFilenameInTitle(filename);
+                state.filename = filename;
+                state.isDraft = false;
+                state.isSaving = false;
+            })
+            .addCase(saveContentToFile.rejected, (state, action) => {
+                showErrorMessage("Failed to save", `Error while saving project to file: ${action.error.message}`);
+                state.isSaving = false;
+            })
     }
 })
 
 export const {
     newFile, toggleRender, setFilename,
-    setContent, setAlignment, setFontSize,
-    saveContentToFile
+    setContent, setAlignment, setFontSize
 } = editorSlice.actions
 export default editorSlice.reducer
