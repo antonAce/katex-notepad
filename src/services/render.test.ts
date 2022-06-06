@@ -1,7 +1,7 @@
 import { parseContent, RenderPiece } from './render';
 
-describe('rendering atomic entities', () => {
-    test('should render empty content', () => {
+describe('parse atomic tex expressions', () => {
+    test('should parse empty content', () => {
         // arrange
         const content = "";
         const expectedPieces: RenderPiece[] = [];
@@ -13,7 +13,7 @@ describe('rendering atomic entities', () => {
         expect(actualPieces).toStrictEqual(expectedPieces);
     });
 
-    test('should render text only as a single element', () => {
+    test('should parse text only as a single element', () => {
         // arrange
         const content = "this is a piece of text without formulas";
         const expectedPieces: RenderPiece[] = [{ type: "text", content: "this is a piece of text without formulas" }];
@@ -25,7 +25,7 @@ describe('rendering atomic entities', () => {
         expect(actualPieces).toStrictEqual(expectedPieces);
     });
 
-    test('should render equation only as a single element', () => {
+    test('should parse equation only as a single element', () => {
         // arrange
         const content = `$ \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} $`;
         const expectedPieces: RenderPiece[] = [{ type: "formula", content: ` \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} ` }];
@@ -37,7 +37,7 @@ describe('rendering atomic entities', () => {
         expect(actualPieces).toStrictEqual(expectedPieces);
     });
 
-    test('should render equation with tight symbols coupling', () => {
+    test('should parse equation with tight symbols coupling', () => {
         // arrange
         const content = `$\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}$`;
         const expectedPieces: RenderPiece[] = [{ type: "formula", content: `\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}` }];
@@ -50,8 +50,8 @@ describe('rendering atomic entities', () => {
     });
 });
 
-describe('rendering complex entities', () => {
-    test('should render combinations with left-side equation', () => {
+describe('parse complex tex expressions', () => {
+    test('should parse combinations with left-side equation', () => {
         // arrange
         const content = `$ \theta^{(i+1)} = \theta^{(i)} - \lambda \nabla_{\theta} J(\theta, x, y) $ - batch gradient descent recurrent sequence equation.`;
         const expectedPieces: RenderPiece[] = [
@@ -66,7 +66,7 @@ describe('rendering complex entities', () => {
         expect(actualPieces).toStrictEqual(expectedPieces);
     });
 
-    test('should render combinations with right-side equation', () => {
+    test('should parse combinations with right-side equation', () => {
         // arrange
         const content = `The statement can be joined into a single formula: $ J_{j}(g, y) = - y \log(g) - (1 - y) \log(1 - g) $`;
         const expectedPieces: RenderPiece[] = [
@@ -81,7 +81,7 @@ describe('rendering complex entities', () => {
         expect(actualPieces).toStrictEqual(expectedPieces);
     });
 
-    test('should render combinations of text and equations', () => {
+    test('should parse combinations of text and equations', () => {
         // arrange
         const content = `By definition, the gradient is a vector that points towards the highest increase of the function value $ F $ in high dimensional space $ R^{n} $, that can be interpreted as a vector of partial derivatives with respect to each parameter $ x_{1}, ..., x_{n} $ of the function $ F $ in the specific point $ a $.`;
         const expectedPieces: RenderPiece[] = [
