@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
+import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/window';
-import { saveToFileDialog, showErrorMessage } from '../../services/dialog';
-import { saveFile } from '../../services/file';
+import { readProject as readProj, saveProject as saveProj, stripFilename } from '../../services/file';
 import { AlignText } from '../types';
 
 interface EditorState {
     isDraft: boolean;
     isRender: boolean;
+    isOpening: boolean;
     isSaving: boolean;
     filename: string;
     filepath?: string;
@@ -23,6 +24,7 @@ export interface FileStructure {
 export const initialState: EditorState = {
     isDraft: true,
     isRender: false,
+    isOpening: false,
     isSaving: false,
     filename: "Untitled",
     filepath: undefined,
@@ -31,17 +33,22 @@ export const initialState: EditorState = {
     fontSize: 14
 }
 
-export const saveContentToFile = createAsyncThunk('editor/saveContentToFile', async (file: FileStructure) => {
+export const openProject = createAsyncThunk('editor/openProject', async () => {
+    const response = await openFileDialog();
+
+    if (response === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
+    const filepath = Array.isArray(response) ? response[0] : response;
+
+    return [filepath, await readProj(filepath)];
+});
+
+export const saveProject = createAsyncThunk('editor/saveProject', async (file: FileStructure) => {
     const filepath = file.filepath ?? await saveToFileDialog();
 
-    if (filepath === null) {
-        return Promise.reject({ message: "File is not selected" } as SerializedError)
-    }
+    if (filepath === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
 
-    const filename = filepath.replace(/^.*[\\/]/, '').split('.')[0]
-
-    await saveFile(filepath, file.content);
-    return [filepath, filename];
+    await saveProj(filepath, file.content);
+    return filepath;
 });
 
 export const editorSlice = createSlice({
@@ -67,11 +74,30 @@ export const editorSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(saveContentToFile.pending, (state, action) => {
+            .addCase(openProject.pending, (state) => {
+                state.isOpening = true;
+            })
+            .addCase(openProject.fulfilled, (state, action) => {
+                const [filepath, content] = action.payload;
+                const filename = stripFilename(filepath);
+
+                setFilenameInTitle(filename);
+                state.filepath = filepath;
+                state.filename = filename;
+                state.content = content;
+                state.isDraft = false;
+                state.isOpening = false;
+            })
+            .addCase(openProject.rejected, (state, action) => {
+                showErrorMessage("Failed to open", `Error while opening project: "${action.error.message}".`);
+                state.isOpening = false;
+            })
+            .addCase(saveProject.pending, (state) => {
                 state.isSaving = true;
             })
-            .addCase(saveContentToFile.fulfilled, (state, action) => {
-                const [filepath, filename] = action.payload;
+            .addCase(saveProject.fulfilled, (state, action) => {
+                const filepath = action.payload;
+                const filename = stripFilename(filepath);
 
                 if (!state.filepath) { state.filepath = filepath; }
                 setFilenameInTitle(filename);
@@ -79,8 +105,8 @@ export const editorSlice = createSlice({
                 state.isDraft = false;
                 state.isSaving = false;
             })
-            .addCase(saveContentToFile.rejected, (state, action) => {
-                showErrorMessage("Failed to save", `Error while saving project to file: "${action.error.message}".`);
+            .addCase(saveProject.rejected, (state, action) => {
+                showErrorMessage("Failed to save", `Error while saving project: "${action.error.message}".`);
                 state.isSaving = false;
             })
     }
