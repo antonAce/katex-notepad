@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import { RootState } from '../store/config';
 import { toggleTheme } from '../store/slice/toolbar';
-import { toggleRender, newFile, saveContentToFile } from '../store/slice/editor';
+import { toggleRender, newFile, saveProject } from '../store/slice/editor';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import Toggle from './Toggle';
@@ -36,7 +36,7 @@ function NavBar() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                         </svg>
                     </Button>
-                    <Button onClick={_ => dispatch(saveContentToFile({ content, filepath }))}>
+                    <Button onClick={_ => dispatch(saveProject({ content, filepath }))} disabled={isSaving}>
                         {
                             isSaving ?
                                 (<span className="spinner"></span>) :
