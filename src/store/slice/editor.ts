@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/window';
 import { saveToFileDialog, showErrorMessage } from '../../services/dialog';
 import { saveFile } from '../../services/file';
@@ -33,6 +33,11 @@ export const initialState: EditorState = {
 
 export const saveContentToFile = createAsyncThunk('editor/saveContentToFile', async (file: FileStructure) => {
     const filepath = file.filepath ?? await saveToFileDialog();
+
+    if (filepath === null) {
+        return Promise.reject({ message: "File is not selected" } as SerializedError)
+    }
+
     const filename = filepath.replace(/^.*[\\/]/, '').split('.')[0]
 
     await saveFile(filepath, file.content);
@@ -75,7 +80,7 @@ export const editorSlice = createSlice({
                 state.isSaving = false;
             })
             .addCase(saveContentToFile.rejected, (state, action) => {
-                showErrorMessage("Failed to save", `Error while saving project to file: ${action.error.message}`);
+                showErrorMessage("Failed to save", `Error while saving project to file: "${action.error.message}".`);
                 state.isSaving = false;
             })
     }
