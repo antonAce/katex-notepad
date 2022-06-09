@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setWindowTheme } from '../../services/window';
+import { setWindowTheme } from '../../services/api/window';
 
 interface ToolbarState {
     isDarkTheme: boolean;

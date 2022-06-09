@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { contextMenuEvent } from './services/config';
-import { setDefaultTitle } from './services/window'
+import { contextMenuEvent } from './services/api/config';
+import { setDefaultTitle } from './services/api/window'
 
 import { toggleRender } from './store/slice/editor';
 import { useAppDispatch } from './store/hooks';

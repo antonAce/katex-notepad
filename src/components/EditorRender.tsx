@@ -1,6 +1,6 @@
 import InlineTex from './InlineTex'
 
-import { parseContent } from '../services/render';
+import { parseContent } from '../services/util/render';
 import { AlignText } from '../store/types';
 
 interface EditorRenderProps {

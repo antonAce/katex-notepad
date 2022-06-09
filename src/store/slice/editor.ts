@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
-import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/dialog';
-import { setFilenameInTitle, setDefaultTitle } from '../../services/window';
-import { readProject as readProj, saveProject as saveProj } from '../../services/file';
-import { stripFilename } from '../../services/util';
+import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
+import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
+import { readProject as readProj, saveProject as saveProj } from '../../services/api/file';
+import { stripFilename } from '../../services/util/file';
 import { AlignText } from '../types';
 
 interface EditorState {
