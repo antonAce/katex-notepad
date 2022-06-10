@@ -6,3 +6,7 @@ export function stripFilename(filepath: string): string {
 export function replaceFilenameInPath(filepath: string, name: string): string {
     return filepath.replace(/(^.*[\\/]).*(\..+$)/, "$1" + name + "$2");
 }
+
+export function validateFilename(filename: string): boolean {
+    return /^[a-zA-Z][\w\- ]*$/.test(filename);
+}

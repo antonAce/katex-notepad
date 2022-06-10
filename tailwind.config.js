@@ -30,7 +30,8 @@ module.exports = {
         900: "#202225",
         content: "#1F2937",
         "content-dark": "#FAFAFA"
-      }
+      },
+      red: colors.red
     }
   },
   plugins: [],

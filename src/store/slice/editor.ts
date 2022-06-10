@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@
 import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
 import { readProject as readProj, saveProject as saveProj } from '../../services/api/file';
-import { stripFilename } from '../../services/util/file';
+import { stripFilename, validateFilename } from '../../services/util/file';
 import { AlignText } from '../types';
 
 interface EditorState {
@@ -10,6 +10,7 @@ interface EditorState {
     isRender: boolean;
     isOpening: boolean;
     isSaving: boolean;
+    isFilenameValid?: boolean;
     filename: string;
     filepath?: string;
     content: string;
@@ -27,6 +28,7 @@ export const initialState: EditorState = {
     isRender: false,
     isOpening: false,
     isSaving: false,
+    isFilenameValid: undefined,
     filename: "Untitled",
     filepath: undefined,
     content: "",
@@ -59,13 +61,17 @@ export const editorSlice = createSlice({
         newFile: (state) => {
             setDefaultTitle();
             state.content = "";
+            state.isFilenameValid = undefined;
             state.filename = "Untitled";
             state.filepath = undefined;
             state.isRender = false;
             state.isDraft = true;
         },
         toggleRender: (state, action: PayloadAction<boolean>) => { state.isRender = action.payload; },
-        setFilename: (state, action: PayloadAction<string>) => { state.filename = action.payload; },
+        setFilename: (state, action: PayloadAction<string>) => {
+            state.filename = action.payload;
+            state.isFilenameValid = validateFilename(action.payload);
+        },
         setContent: (state, action: PayloadAction<string>) => {
             state.content = action.payload;
             state.isDraft = true;

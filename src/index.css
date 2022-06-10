@@ -16,6 +16,10 @@ body {
     scrollbar-width: none;
 }
 
+.text-invalid {
+    @apply text-red-700;
+}
+
 .number-input::after {
     @apply absolute bottom-2 right-9 text-base-800 dark:text-base-300 font-extrabold;
     content: 'px';
@@ -26,7 +30,7 @@ body {
 }
 
 .spinner:after {
-    @apply block w-4 h-4 m-1 rounded-[50%] border-[0.15rem] border-solid border-y-base-800 border-x-base-100/0;
+    @apply block w-4 h-4 m-1 rounded-[50%] border-[0.15rem] border-solid border-y-base-800 dark:border-y-base-300 border-x-base-100/0;
     animation: spinner 0.7s linear infinite;
     content: " ";
 }
