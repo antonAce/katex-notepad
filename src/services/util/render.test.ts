@@ -27,8 +27,8 @@ describe('parse atomic tex expressions', () => {
 
     test('should parse equation only as a single element', () => {
         // arrange
-        const content = `$ \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} $`;
-        const expectedPieces: RenderPiece[] = [{ type: "formula", content: ` \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} ` }];
+        const content = String.raw`$ \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} $`;
+        const expectedPieces: RenderPiece[] = [{ type: "formula", content: String.raw` \hat{J} (f(\theta, x), y) = || f(\theta, x) - y ||^{2} ` }];
 
         // act
         const actualPieces = parseContent(content);
@@ -39,8 +39,8 @@ describe('parse atomic tex expressions', () => {
 
     test('should parse equation with tight symbols coupling', () => {
         // arrange
-        const content = `$\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}$`;
-        const expectedPieces: RenderPiece[] = [{ type: "formula", content: `\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}` }];
+        const content = String.raw`$\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}$`;
+        const expectedPieces: RenderPiece[] = [{ type: "formula", content: String.raw`\hat{J}(f(\theta,x),y)=||f(\theta,x)-y||^{2}` }];
 
         // act
         const actualPieces = parseContent(content);
@@ -53,9 +53,9 @@ describe('parse atomic tex expressions', () => {
 describe('parse complex tex expressions', () => {
     test('should parse combinations with left-side equation', () => {
         // arrange
-        const content = `$ \theta^{(i+1)} = \theta^{(i)} - \lambda \nabla_{\theta} J(\theta, x, y) $ - batch gradient descent recurrent sequence equation.`;
+        const content = String.raw`$ \theta^{(i+1)} = \theta^{(i)} - \lambda \nabla_{\theta} J(\theta, x, y) $ - batch gradient descent recurrent sequence equation.`;
         const expectedPieces: RenderPiece[] = [
-            { type: "formula", content: ` \theta^{(i+1)} = \theta^{(i)} - \lambda \nabla_{\theta} J(\theta, x, y) ` },
+            { type: "formula", content: String.raw` \theta^{(i+1)} = \theta^{(i)} - \lambda \nabla_{\theta} J(\theta, x, y) ` },
             { type: "text", content: " - batch gradient descent recurrent sequence equation." }
         ];
 
@@ -68,10 +68,10 @@ describe('parse complex tex expressions', () => {
 
     test('should parse combinations with right-side equation', () => {
         // arrange
-        const content = `The statement can be joined into a single formula: $ J_{j}(g, y) = - y \log(g) - (1 - y) \log(1 - g) $`;
+        const content = String.raw`The statement can be joined into a single formula: $ J_{j}(g, y) = - y \log(g) - (1 - y) \log(1 - g) $`;
         const expectedPieces: RenderPiece[] = [
             { type: "text", content: "The statement can be joined into a single formula: " },
-            { type: "formula", content: ` J_{j}(g, y) = - y \log(g) - (1 - y) \log(1 - g) ` }
+            { type: "formula", content: String.raw` J_{j}(g, y) = - y \log(g) - (1 - y) \log(1 - g) ` }
         ];
 
         // act
