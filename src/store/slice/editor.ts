@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
-import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
+import { openAskDialog, openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
 import {
     readProject as readProjectApi,
@@ -58,7 +58,6 @@ export const renameProject = createAsyncThunk('editor/renameProject', async (fil
 
 export const openProject = createAsyncThunk('editor/openProject', async () => {
     const response = await openFileDialog();
-
     if (response === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
     const filepath = Array.isArray(response) ? response[0] : response;
 
@@ -67,15 +66,17 @@ export const openProject = createAsyncThunk('editor/openProject', async () => {
 
 export const saveProject = createAsyncThunk('editor/saveProject', async (file: FileStructure) => {
     const filepath = file.filepath ?? await saveToFileDialog();
-
     if (filepath === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
-
     await saveProjectApi(filepath, file.content);
+
     return filepath;
 });
 
 export const deleteProject = createAsyncThunk('editor/deleteProject', async (filepath: string) => {
-    await deleteProjectApi(filepath);
+    const isConfirmed = await openAskDialog("Confirm delete", "Are you sure you want to delete project?");
+    if (isConfirmed) { await deleteProjectApi(filepath); }
+
+    return isConfirmed;
 });
 
 export const editorSlice = createSlice({
@@ -162,14 +163,18 @@ export const editorSlice = createSlice({
             .addCase(deleteProject.pending, (state) => {
                 state.isDeleting = true;
             })
-            .addCase(deleteProject.fulfilled, (state) => {
-                setDefaultTitle();
-                state.content = "";
-                state.isFilenameValid = undefined;
-                state.filename = "Untitled";
-                state.filepath = undefined;
-                state.isRender = false;
-                state.isDraft = true;
+            .addCase(deleteProject.fulfilled, (state, action) => {
+                const isConfirmed = action.payload;
+
+                if (isConfirmed) {
+                    setDefaultTitle();
+                    state.content = "";
+                    state.isFilenameValid = undefined;
+                    state.filename = "Untitled";
+                    state.filepath = undefined;
+                    state.isRender = false;
+                    state.isDraft = true;
+                }
 
                 state.isDeleting = false;
             })
