@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
 import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
-import { readProject as readProj, saveProject as saveProj, renameProjectAndReturnPath as renameProj } from '../../services/api/file';
+import {
+    readProject as readProjectApi,
+    saveProject as saveProjectApi,
+    renameProjectAndReturnPath as renameProjectApi,
+    deleteProject as deleteProjectApi
+} from '../../services/api/file';
 import { stripFilename, isFilenameValid } from '../../services/util/file';
 import { AlignText } from '../types';
 
@@ -12,6 +17,7 @@ interface EditorState {
     isSaving: boolean;
     isRenaming: boolean;
     isRenamingSaved: boolean;
+    isDeleting: boolean;
     isFilenameValid?: boolean;
     filename: string;
     filepath?: string;
@@ -37,6 +43,7 @@ export const initialState: EditorState = {
     isSaving: false,
     isRenaming: false,
     isRenamingSaved: false,
+    isDeleting: false,
     isFilenameValid: undefined,
     filename: "Untitled",
     filepath: undefined,
@@ -46,7 +53,7 @@ export const initialState: EditorState = {
 }
 
 export const renameProject = createAsyncThunk('editor/renameProject', async (file: FileRenameStructure) => {
-    return (!!file.filepath && isFilenameValid(file.name)) ? await renameProj(file.filepath, file.name) : undefined;
+    return (!!file.filepath && isFilenameValid(file.name)) ? await renameProjectApi(file.filepath, file.name) : undefined;
 });
 
 export const openProject = createAsyncThunk('editor/openProject', async () => {
@@ -55,7 +62,7 @@ export const openProject = createAsyncThunk('editor/openProject', async () => {
     if (response === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
     const filepath = Array.isArray(response) ? response[0] : response;
 
-    return [filepath, await readProj(filepath)];
+    return [filepath, await readProjectApi(filepath)];
 });
 
 export const saveProject = createAsyncThunk('editor/saveProject', async (file: FileStructure) => {
@@ -63,8 +70,12 @@ export const saveProject = createAsyncThunk('editor/saveProject', async (file: F
 
     if (filepath === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
 
-    await saveProj(filepath, file.content);
+    await saveProjectApi(filepath, file.content);
     return filepath;
+});
+
+export const deleteProject = createAsyncThunk('editor/deleteProject', async (filepath: string) => {
+    await deleteProjectApi(filepath);
 });
 
 export const editorSlice = createSlice({
@@ -147,6 +158,24 @@ export const editorSlice = createSlice({
                 showErrorMessage("Failed to rename project", `Error while renaming project: "${action.error.message}".`);
                 state.isRenaming = false;
                 state.isRenamingSaved = false;
+            })
+            .addCase(deleteProject.pending, (state) => {
+                state.isDeleting = true;
+            })
+            .addCase(deleteProject.fulfilled, (state) => {
+                setDefaultTitle();
+                state.content = "";
+                state.isFilenameValid = undefined;
+                state.filename = "Untitled";
+                state.filepath = undefined;
+                state.isRender = false;
+                state.isDraft = true;
+
+                state.isDeleting = false;
+            })
+            .addCase(deleteProject.rejected, (state, action) => {
+                showErrorMessage("Failed to delete project", `Error while deleting project: "${action.error.message}".`);
+                state.isDeleting = false;
             })
     }
 })

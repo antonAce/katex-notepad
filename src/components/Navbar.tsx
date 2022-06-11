@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 import { RootState } from '../store/config';
 import { toggleTheme } from '../store/slice/toolbar';
-import { toggleRender, newFile, saveProject, openProject } from '../store/slice/editor';
+import { toggleRender, newFile, saveProject, openProject, deleteProject } from '../store/slice/editor';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 import Toggle from './Toggle';
@@ -18,6 +18,7 @@ const LightModeIcon = memo(() => (<svg xmlns="http://www.w3.org/2000/svg" classN
 function NavBar() {
     const isOpening = useAppSelector((state: RootState) => state.editor.isOpening);
     const isSaving = useAppSelector((state: RootState) => state.editor.isSaving);
+    const isDeleting = useAppSelector((state: RootState) => state.editor.isDeleting);
     const filepath = useAppSelector((state: RootState) => state.editor.filepath);
     const content = useAppSelector((state: RootState) => state.editor.content);
 
@@ -59,10 +60,16 @@ function NavBar() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </Button>
-                    <Button>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-icons h-icons" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                    <Button onClick={_ => filepath && dispatch(deleteProject(filepath))}>
+                        {
+                            isDeleting ?
+                                (<span className="spinner"></span>) :
+                                (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-icons h-icons" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                )
+                        }
                     </Button>
                     <Toggle onClick={val => dispatch(toggleRender(val))} defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
                 </div>
