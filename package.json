@@ -25,7 +25,7 @@
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:ci": "react-scripts test --watchAll=false",
+    "test:ci": "react-scripts test --watchAll=false --verbose=true",
     "eject": "react-scripts eject",
     "tauri": "tauri"
   },

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@
 import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
 import { readProject as readProj, saveProject as saveProj, renameProjectAndReturnPath as renameProj } from '../../services/api/file';
-import { stripFilename, validateFilename } from '../../services/util/file';
+import { stripFilename, isFilenameValid } from '../../services/util/file';
 import { AlignText } from '../types';
 
 interface EditorState {
@@ -46,7 +46,7 @@ export const initialState: EditorState = {
 }
 
 export const renameProject = createAsyncThunk('editor/renameProject', async (file: FileRenameStructure) => {
-    return (!!file.filepath && validateFilename(file.name)) ? await renameProj(file.filepath, file.name) : undefined;
+    return (!!file.filepath && isFilenameValid(file.name)) ? await renameProj(file.filepath, file.name) : undefined;
 });
 
 export const openProject = createAsyncThunk('editor/openProject', async () => {
@@ -84,7 +84,7 @@ export const editorSlice = createSlice({
         setFilename: (state, action: PayloadAction<string>) => {
             state.isRenamingSaved = false;
             state.filename = action.payload;
-            state.isFilenameValid = validateFilename(action.payload);
+            state.isFilenameValid = isFilenameValid(action.payload);
         },
         setContent: (state, action: PayloadAction<string>) => {
             state.content = action.payload;

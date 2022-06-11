@@ -1,4 +1,4 @@
-import { stripFilename, replaceFilenameInPath } from './file';
+import { stripFilename, replaceFilenameInPath, isFilenameValid } from './file';
 
 describe('strip filename from a filepath', () => {
     describe('strip filename from Windows-like path', () => {
@@ -134,5 +134,50 @@ describe('replace filename in a filepath', () => {
             // assert
             expect(actualFilename).toStrictEqual(expectedFilepath);
         });
+    });
+});
+
+describe('is filename valid check', () => {
+    test.each([
+        // arrange
+        { caseType: "lowercase", filename: "filename" },
+        { caseType: "uppercase", filename: "FILENAME" },
+        { caseType: "mixed case", filename: "FiLeNaMe" },
+    ])('should be valid if filename without spaces and $caseType', ({ caseType, filename }) => {
+        // act
+        const actualIsValid = isFilenameValid(filename);
+
+        // assert
+        expect(actualIsValid).toBeTruthy();
+    });
+
+    test.each([
+        // arrange
+        { condition: "numbers at the end", filename: "filename03" },
+        { condition: "underscores in the middle", filename: "file_name" },
+        { condition: "dashes in the middle", filename: "file-name" },
+        { condition: "spaces in the middle", filename: "File name" },
+        { condition: "dot at the beginning (hidden file)", filename: ".filename" },
+    ])('should be valid if filename contains $condition', ({ condition, filename }) => {
+        // act
+        const actualIsValid = isFilenameValid(filename);
+
+        // assert
+        expect(actualIsValid).toBeTruthy();
+    });
+
+    test.each([
+        // arrange
+        { condition: "numbers at the beginning", filename: "03filename" },
+        { condition: "dashes at both sides", filename: "-filename-" },
+        { condition: "underscores at both sides", filename: "_filename_" },
+        { condition: "has extension", filename: "filename.tex" },
+        { condition: "has dots in the middle or at the end", filename: "file.name." },
+    ])('should not be valid if filename contains $condition', ({ condition, filename }) => {
+        // act
+        const actualIsValid = isFilenameValid(filename);
+
+        // assert
+        expect(actualIsValid).toBeFalsy();
     });
 });
