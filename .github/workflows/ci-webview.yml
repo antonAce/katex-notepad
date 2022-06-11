@@ -1,0 +1,28 @@
+name: "CI Webview"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ci-webview:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16
+    - name: Install webview and dev dependencies
+      run: npm install --save-dev
+    - name: Build webview
+      run: npm run build
+    - name: Test webview
+      run: npm run test:ci
