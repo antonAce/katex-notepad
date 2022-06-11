@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
 import { openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
-import { readProject as readProj, saveProject as saveProj } from '../../services/api/file';
+import { readProject as readProj, saveProject as saveProj, renameProjectAndReturnPath as renameProj } from '../../services/api/file';
 import { stripFilename, validateFilename } from '../../services/util/file';
 import { AlignText } from '../types';
 
@@ -10,6 +10,8 @@ interface EditorState {
     isRender: boolean;
     isOpening: boolean;
     isSaving: boolean;
+    isRenaming: boolean;
+    isRenamingSaved: boolean;
     isFilenameValid?: boolean;
     filename: string;
     filepath?: string;
@@ -23,11 +25,18 @@ export interface FileStructure {
     content: string;
 }
 
+export interface FileRenameStructure {
+    filepath?: string;
+    name: string;
+}
+
 export const initialState: EditorState = {
     isDraft: true,
     isRender: false,
     isOpening: false,
     isSaving: false,
+    isRenaming: false,
+    isRenamingSaved: false,
     isFilenameValid: undefined,
     filename: "Untitled",
     filepath: undefined,
@@ -35,6 +44,10 @@ export const initialState: EditorState = {
     alignText: "left",
     fontSize: 14
 }
+
+export const renameProject = createAsyncThunk('editor/renameProject', async (file: FileRenameStructure) => {
+    return (!!file.filepath && validateFilename(file.name)) ? await renameProj(file.filepath, file.name) : undefined;
+});
 
 export const openProject = createAsyncThunk('editor/openProject', async () => {
     const response = await openFileDialog();
@@ -69,6 +82,7 @@ export const editorSlice = createSlice({
         },
         toggleRender: (state, action: PayloadAction<boolean>) => { state.isRender = action.payload; },
         setFilename: (state, action: PayloadAction<string>) => {
+            state.isRenamingSaved = false;
             state.filename = action.payload;
             state.isFilenameValid = validateFilename(action.payload);
         },
@@ -96,7 +110,7 @@ export const editorSlice = createSlice({
                 state.isOpening = false;
             })
             .addCase(openProject.rejected, (state, action) => {
-                showErrorMessage("Failed to open", `Error while opening project: "${action.error.message}".`);
+                showErrorMessage("Failed to open project", `Error while opening project: "${action.error.message}".`);
                 state.isOpening = false;
             })
             .addCase(saveProject.pending, (state) => {
@@ -113,8 +127,26 @@ export const editorSlice = createSlice({
                 state.isSaving = false;
             })
             .addCase(saveProject.rejected, (state, action) => {
-                showErrorMessage("Failed to save", `Error while saving project: "${action.error.message}".`);
+                showErrorMessage("Failed to save project", `Error while saving project: "${action.error.message}".`);
                 state.isSaving = false;
+            })
+            .addCase(renameProject.pending, (state) => {
+                if (!!state.filepath) {
+                    state.isRenamingSaved = false;
+                    state.isRenaming = true;
+                }
+            })
+            .addCase(renameProject.fulfilled, (state, action) => {
+                if (!!state.filepath) {
+                    if (state.isFilenameValid) { state.filepath = action.payload; }
+                    state.isRenaming = false;
+                    state.isRenamingSaved = true;
+                }
+            })
+            .addCase(renameProject.rejected, (state, action) => {
+                showErrorMessage("Failed to rename project", `Error while renaming project: "${action.error.message}".`);
+                state.isRenaming = false;
+                state.isRenamingSaved = false;
             })
     }
 })
