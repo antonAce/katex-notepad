@@ -13,7 +13,7 @@ function EditorRender(props: EditorRenderProps) {
     const renderStyles: React.CSSProperties = { textAlign: props.align };
 
     return (
-        <span className="bg-transparent px-2 py-1 mt-2" style={renderStyles}>
+        <span id="rendered-text" className="bg-transparent px-2 py-1 mt-2" style={renderStyles}>
             { parseContent(props.content).map(
                 (piece, i) => piece.type === "formula" ?
                 (<InlineTex key={i} content={piece.content} fontSize={props.fontSize} />) :
