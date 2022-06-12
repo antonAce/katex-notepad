@@ -1,6 +1,6 @@
 [package]
 name = "katex-notepad"
-version = "0.1.0"
+version = "0.6.0"
 description = "A simple desktop application for editing and saving complex math expressions and scripts."
 authors = ["Anton Kozyriev"]
 license = "MIT License"
@@ -13,9 +13,12 @@ rust-version = "1.57"
 tauri-build = { version = "1.0.0-rc.10", features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.0-rc.12", features = ["api-all"] }
+image = "^0.24.2"
+base64 = "^0.13.0"
+arboard = "^2.1.1"
+serde_json = "^1.0"
+serde = { version = "^1.0", features = ["derive"] }
+tauri = { version = "^1.0.0-rc.12", features = ["api-all"] }
 
 [features]
 default = [ "custom-protocol" ]
