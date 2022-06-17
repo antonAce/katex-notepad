@@ -1,8 +1,7 @@
-import { Canvg } from 'canvg';
-import { elementToSVG, inlineResources } from 'dom-to-svg'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { showErrorMessage } from '../../services/api/dialog';
 import { saveEncodedImageToClipboard } from '../../services/api/handlers';
+import { renderElementToBase64 } from '../../services/util/render';
 
 interface RenderState {
     isRendering: boolean;
@@ -13,17 +12,11 @@ export const initialState: RenderState = {
 }
 
 export const renderToClipboard = createAsyncThunk('render/renderToClipboard', async () => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d') ?? {} as CanvasRenderingContext2D;
     const element = document.getElementById('rendered-text') ?? document.body;
     const [width, height] = [element.getBoundingClientRect().width, element.getBoundingClientRect().height];
-    const svgDocument = elementToSVG(element);
+    const encodedCanvas = await renderElementToBase64(element);
 
-    await inlineResources(svgDocument.documentElement);
-    const serializedSvg = new XMLSerializer().serializeToString(svgDocument);
-
-    Canvg.fromString(context, serializedSvg).start();
-    await saveEncodedImageToClipboard(width, height, canvas.toDataURL('image/png', 1.0).replace('data:image/png;base64,', ''));
+    await saveEncodedImageToClipboard(width, height, encodedCanvas);
 });
 
 export const toolbarSlice = createSlice({
