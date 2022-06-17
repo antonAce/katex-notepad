@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
-import { openAskDialog, openFileDialog, saveToFileDialog, showErrorMessage } from '../../services/api/dialog';
+import { openAskDialog, openProjectDialog, saveProjectDialog, showErrorMessage } from '../../services/api/dialog';
 import { setFilenameInTitle, setDefaultTitle } from '../../services/api/window';
 import {
     readProject as readProjectApi,
@@ -57,7 +57,7 @@ export const renameProject = createAsyncThunk('editor/renameProject', async (fil
 });
 
 export const openProject = createAsyncThunk('editor/openProject', async () => {
-    const response = await openFileDialog();
+    const response = await openProjectDialog();
     if (response === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
     const filepath = Array.isArray(response) ? response[0] : response;
 
@@ -65,7 +65,7 @@ export const openProject = createAsyncThunk('editor/openProject', async () => {
 });
 
 export const saveProject = createAsyncThunk('editor/saveProject', async (file: FileStructure) => {
-    const filepath = file.filepath ?? await saveToFileDialog();
+    const filepath = file.filepath ?? await saveProjectDialog();
     if (filepath === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
     await saveProjectApi(filepath, file.content);
 

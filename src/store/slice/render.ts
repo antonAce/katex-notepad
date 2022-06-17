@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showErrorMessage } from '../../services/api/dialog';
-import { saveEncodedImageToClipboard } from '../../services/api/handlers';
+import { createSlice, createAsyncThunk, SerializedError } from '@reduxjs/toolkit';
+import { showErrorMessage, exportFileDialog } from '../../services/api/dialog';
+import { saveEncodedImageToFile, saveEncodedImageToClipboard } from '../../services/api/handlers';
 import { renderElementToBase64 } from '../../services/util/render';
 
 interface RenderState {
@@ -19,20 +19,32 @@ export const renderToClipboard = createAsyncThunk('render/renderToClipboard', as
     await saveEncodedImageToClipboard(width, height, encodedCanvas);
 });
 
+export const renderToFile = createAsyncThunk('render/renderToFile', async () => {
+    const filepath = await exportFileDialog();
+    if (filepath === null) { return Promise.reject({ message: "Operation was cancelled" } as SerializedError) }
+
+    const element = document.getElementById('rendered-text') ?? document.body;
+    const encodedCanvas = await renderElementToBase64(element);
+
+    await saveEncodedImageToFile(encodedCanvas, filepath);
+});
+
 export const toolbarSlice = createSlice({
     name: 'render',
     initialState,
     reducers: {},
     extraReducers(builder) {
         builder
-            .addCase(renderToClipboard.pending, (state) => {
-                state.isRendering = true;
-            })
-            .addCase(renderToClipboard.fulfilled, (state) => {
+            .addCase(renderToClipboard.pending, (state) => { state.isRendering = true; })
+            .addCase(renderToClipboard.fulfilled, (state) => { state.isRendering = false; })
+            .addCase(renderToClipboard.rejected, (state, action) => {
+                showErrorMessage("Failed render to clipboard", `Error while rendering editor content: "${action.error.message}".`);
                 state.isRendering = false;
             })
-            .addCase(renderToClipboard.rejected, (state, action) => {
-                showErrorMessage("Failed to render TeX to image", `Error while rendering editor content: "${action.error.message}".`);
+            .addCase(renderToFile.pending, (state) => { state.isRendering = true; })
+            .addCase(renderToFile.fulfilled, (state) => { state.isRendering = false; })
+            .addCase(renderToFile.rejected, (state, action) => {
+                showErrorMessage("Failed render to file", `Error while rendering editor content: "${action.error.message}".`);
                 state.isRendering = false;
             })
     }
