@@ -22,18 +22,20 @@ function NavBar() {
     const filepath = useAppSelector((state: RootState) => state.editor.filepath);
     const content = useAppSelector((state: RootState) => state.editor.content);
 
+    const isRendering = useAppSelector((state: RootState) => state.render.isRendering);
+
     const dispatch = useAppDispatch();
 
     return (
         <div className="flex flex-row flex-nowrap w-full h-full bg-base-200 dark:bg-base-800">
             <div className="flex-auto">
                 <div className="flex flex-row flex-nowrap gap-x-1 justify-start items-center w-full h-full p-default">
-                    <Button onClick={_ => dispatch(newFile())}>
+                    <Button onClick={_ => dispatch(newFile())} disabled={isRendering}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-icons h-icons" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </Button>
-                    <Button onClick={_ => dispatch(openProject())} disabled={isOpening}>
+                    <Button onClick={_ => dispatch(openProject())} disabled={isOpening || isRendering}>
                         {
                             isOpening ?
                                 (<span className="spinner"></span>) :
@@ -44,7 +46,7 @@ function NavBar() {
                                 )
                         }
                     </Button>
-                    <Button onClick={_ => dispatch(saveProject({ content, filepath }))} disabled={isSaving}>
+                    <Button onClick={_ => dispatch(saveProject({ content, filepath }))} disabled={isSaving || isRendering}>
                         {
                             isSaving ?
                                 (<span className="spinner"></span>) :
@@ -55,7 +57,7 @@ function NavBar() {
                                 )
                         }
                     </Button>
-                    <Button onClick={_ => filepath && dispatch(deleteProject(filepath))}>
+                    <Button onClick={_ => filepath && dispatch(deleteProject(filepath))} disabled={isRendering}>
                         {
                             isDeleting ?
                                 (<span className="spinner"></span>) :
@@ -66,13 +68,13 @@ function NavBar() {
                                 )
                         }
                     </Button>
-                    <Toggle onClick={val => dispatch(toggleRender(val))} defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} />
+                    <Toggle onClick={val => dispatch(toggleRender(val))} defaultNode={<RenderOnIcon />} toggledNode={<RenderOffIcon />} disabled={isRendering} />
                 </div>
             </div>
             <div className="basis-18 min-w-18">
                 <div className="flex flex-row flex-nowrap gap-x-1 justify-start items-center w-full h-full p-default">
-                    <Toggle onClick={value => dispatch(toggleTheme(value))} defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} />
-                    <Toggle defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} />
+                    <Toggle onClick={value => dispatch(toggleTheme(value))} defaultNode={<DarkModeIcon />} toggledNode={<LightModeIcon />} disabled={isRendering} />
+                    <Toggle defaultNode={<MenuOpenIcon />} toggledNode={<MenuCloseIcon />} disabled={isRendering} />
                 </div>
             </div>
         </div>

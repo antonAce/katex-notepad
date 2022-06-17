@@ -32,7 +32,7 @@ function Editor() {
                             <div className="p-2 font-extrabold text-base-800 dark:text-base-300">{filename}</div>
                         </div>
                         <div className="basis-10 min-w-10 p-1">
-                            <Button onClick={_ => dispatch(renderToClipboard())}>
+                            <Button onClick={_ => dispatch(renderToClipboard())} disabled={isRendering}>
                                 {
                                     isRendering ?
                                         (<span className="spinner"></span>) :
