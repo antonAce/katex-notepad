@@ -1,4 +1,4 @@
-import { parseContent, RenderPiece } from './render';
+import { parseContent, RenderPiece } from './parser';
 
 describe('parse atomic tex expressions', () => {
     test('should parse empty content', () => {
